@@ -1,11 +1,9 @@
-package main
+package metrics
 
 import (
-	"fmt"
+	"testing"
 
 	"github.com/prometheus/client_golang/prometheus"
-	_ "github.com/wunicorns/goutils/batch"
-	"github.com/wunicorns/goutils/metrics"
 )
 
 var (
@@ -16,25 +14,7 @@ var (
 		nil)
 )
 
-func main() {
-
-	// batch.Module()
-	// metrics.MetricServer()
-
-	// chanReceiver{}
-
-	// receive := make(chan interface{})
-
-	// go func() {
-	// 	receive <- 10.
-	// }()
-
-	// num := <-receive
-	// fmt.Println(num)
-	// num2 := num.(float64) * 0.
-	// fmt.Println(0 / num2)
-
-	// fmt.Println("done")
+func TestServe(t *testing.T) {
 
 	promConfig := metrics.PromConfig{
 		MetricsPath:        "/metrics",
@@ -58,24 +38,4 @@ func main() {
 	}
 
 	launcher.Serve(&promConfig)
-
-}
-
-type Task interface {
-	Run()
-}
-
-type FuncTask func()
-
-func (f FuncTask) Run() { f() }
-
-func Call(cmd Task) {
-	cmd.Run()
-}
-
-func _main() {
-	callable := func() {
-		fmt.Println(1)
-	}
-	Call(FuncTask(callable))
 }
