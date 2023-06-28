@@ -48,10 +48,12 @@ func Module() {
 	s := Scheduler{}
 	s.Tasks = &[]Task{
 		Task{
+			Name:     "job1",
 			Schedule: `*/6 * * * * *`,
 			Handler:  job1(rand.Int()),
 		},
 		Task{
+			Name:     "job2",
 			Schedule: `*/3 * * * * *`,
 			Handler:  job2(rand.Int()),
 		},

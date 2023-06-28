@@ -84,7 +84,7 @@ func async(v string) {
 
 	workItems := make([]int, 30)
 
-	var wg sync.WaitGroup
+	wg := &sync.WaitGroup{}
 	defer wg.Wait()
 
 	for item, _ := range workItems {
@@ -105,7 +105,7 @@ func async2(v string) {
 
 	workItems := make([]int, 30)
 
-	var wg sync.WaitGroup
+	wg := &sync.WaitGroup{}
 	defer wg.Wait()
 
 	pool := make(chan Task, numWorkers)
