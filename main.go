@@ -2,10 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"strings"
 
 	_ "github.com/wunicorns/goutils/batch"
+	"github.com/wunicorns/goutils/querybuilder"
 )
 
 func main() {
@@ -14,11 +13,10 @@ func main() {
 
 	filename := "querybuilder/sample.yml"
 
-	if finfo, err := os.Stat(filename); err != nil {
-		panic(err)
-	} else {
+	querybuilder.QueryBuilderInitialize(filename)
 
-		fmt.Println(finfo.Name(), strings.HasSuffix(finfo.Name(), ".yml"))
-	}
+	stmt := querybuilder.GetQueryBuilder().GetStatement("get_sample_list")
+
+	fmt.Println(stmt.Script)
 
 }
