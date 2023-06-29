@@ -1,0 +1,23 @@
+upsert_sample_list:
+  description: "upsert_sample_list"
+  type: "mysql"
+  script: '
+INSERT INTO tb_sample
+(sample_name, sample_pw, create_dt, update_dt)
+VALUES(:sample_name, :sample_pw, current_timestamp())
+ON DUPLICATE KEY UPDATE 
+update_dt = current_timestamp()
+  '
+#---------------------------------------- 
+get_sample_list:
+  description: "get sample list"
+  type: "mysql"
+  columns:
+    - "sample_id"
+    - "sample_name"
+    - "sample_name=>username"
+  script: '
+select sample_id, sample_name, sample_pw, create_dt, update_dt
+from tb_sample smp
+  '
+#---------------------------------------- 
