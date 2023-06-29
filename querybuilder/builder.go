@@ -9,6 +9,10 @@ import (
 	yaml "gopkg.in/yaml.v3"
 )
 
+const (
+	INVALID_FILE_TYPE = "invalid file type"
+)
+
 type QueryError struct {
 	QueryFile string
 	Message   string
@@ -71,7 +75,18 @@ func (qb *QueryBuilder) loadFileData(scriptFilePath string) *QueryError {
 	return nil
 }
 
+func validFileType(filename string) bool {
+	isValid := strings.HasSuffix(filename, ".yml") || strings.HasSuffix(filename, ".yaml")
+	return isValid
+}
+
 func (qb *QueryBuilder) loadFile() error {
+	if !validFileType(qb.ScriptPath) {
+		return &QueryError{
+			QueryFile: qb.ScriptPath,
+			Message:   INVALID_FILE_TYPE,
+		}
+	}
 	if err := qb.loadFileData(qb.ScriptPath); err != nil {
 		return err
 	}
@@ -87,11 +102,12 @@ func (qb *QueryBuilder) loadFiles() error {
 				continue
 			}
 			fileName := fileInfo.Name()
-			if strings.HasSuffix(fileName, ".yml") || strings.HasSuffix(fileName, ".yaml") {
-				scriptFilePath := fmt.Sprintf("%s/%s", qb.ScriptPath, fileName)
-				if err := qb.loadFileData(scriptFilePath); err != nil {
-					return err
-				}
+			if validFileType(qb.ScriptPath) {
+				continue
+			}
+			scriptFilePath := fmt.Sprintf("%s/%s", qb.ScriptPath, fileName)
+			if err := qb.loadFileData(scriptFilePath); err != nil {
+				return err
 			}
 		}
 		return nil
