@@ -10,6 +10,8 @@ import (
 
 type MariadbConfig struct {
 	ConnectionString string `toml:"MYSQL_CONNECTION_STRING"`
+	MaxIdleConns     int    // default 10
+	MaxOpenConns     int    // default 10
 }
 
 type Mariadb struct {
@@ -43,8 +45,8 @@ func (conn *Mariadb) Connect() error {
 		return err
 	} else {
 		conn.DB = db
-		conn.DB.SetMaxIdleConns(10)
-		conn.DB.SetMaxOpenConns(10)
+		conn.DB.SetMaxIdleConns(conn.Config.MaxIdleConns)
+		conn.DB.SetMaxOpenConns(conn.Config.MaxOpenConns)
 	}
 	return nil
 }
