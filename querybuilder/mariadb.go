@@ -14,6 +14,7 @@ type MariadbConfig struct {
 	MaxOpenConns     int    // default 10
 }
 
+// Mariadb
 type Mariadb struct {
 	Config MariadbConfig
 	DB     *sqlx.DB
