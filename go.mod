@@ -6,6 +6,7 @@ replace (
 	github.com/wunicorns/goutils/metrics => ./metrics
 	github.com/wunicorns/goutils/patterns => ./patterns
 	github.com/wunicorns/goutils/querybuilder => ./querybuilder
+	github.com/wunicorns/goutils/httprequest => ./httprequest
 )
 
 go 1.19
