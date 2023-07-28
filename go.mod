@@ -16,6 +16,7 @@ require (
 	github.com/prometheus/prometheus v0.45.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/wunicorns/goutils/batch v0.0.0-00010101000000-000000000000
+	github.com/wunicorns/goutils/httprequest v0.0.0-00010101000000-000000000000
 	github.com/wunicorns/goutils/querybuilder v0.0.0-00010101000000-000000000000
 	golang.org/x/sys v0.9.0
 )

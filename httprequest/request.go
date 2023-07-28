@@ -5,6 +5,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -44,12 +45,14 @@ func NewClient() *http.Client {
 
 }
 
-func (api *RestAPI) NewRequest(method, url string, params map[string]interface{}) ([]byte, error) {
+func (api *RestAPI) Request(method, url string, params map[string]interface{}) ([]byte, error) {
 
 	fullUrl := api.GetUrl(url)
 
-	var buff *bytes.Buffer = nil
+	var req *http.Request
+	var err error
 
+	var buff io.Reader
 	if params != nil {
 		if pbytes, err := json.Marshal(params); err != nil {
 			return nil, err
@@ -57,8 +60,7 @@ func (api *RestAPI) NewRequest(method, url string, params map[string]interface{}
 			buff = bytes.NewBuffer(pbytes)
 		}
 	}
-
-	req, err := http.NewRequest(method, fullUrl, buff)
+	req, err = http.NewRequest(method, fullUrl, buff)
 
 	if err != nil {
 		return nil, err
@@ -94,7 +96,7 @@ func (api *RestAPI) NewRequest(method, url string, params map[string]interface{}
 
 func (api *RestAPI) Get(url string) (string, error) {
 
-	data, err := api.NewRequest(http.MethodGet, url, nil)
+	data, err := api.Request(http.MethodGet, url, nil)
 
 	if err != nil {
 		return "", err
@@ -106,7 +108,7 @@ func (api *RestAPI) Get(url string) (string, error) {
 
 func (api *RestAPI) GetJson(url string, objType interface{}) (string, error) {
 
-	data, err := api.NewRequest(http.MethodGet, url, nil)
+	data, err := api.Request(http.MethodGet, url, nil)
 
 	if err != nil {
 		return "", err
