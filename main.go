@@ -2,17 +2,17 @@ package main
 
 import (
 	"fmt"
-	"time"
 
 	_ "github.com/wunicorns/goutils/batch"
 	_ "github.com/wunicorns/goutils/httprequest"
-	"github.com/wunicorns/goutils/patterns"
+	"github.com/wunicorns/goutils/mariadb"
+	_ "github.com/wunicorns/goutils/patterns"
 	_ "github.com/wunicorns/goutils/querybuilder"
 )
 
 func main() {
 
-	// fmt.Println("start")
+	fmt.Println("start")
 
 	// filename := "querybuilder/sample.yml"
 
@@ -34,10 +34,18 @@ func main() {
 	// 	fmt.Println(str)
 	// }
 
-	for i, _ := range make([]int, 10) {
-		go patterns.Execute(fmt.Sprintf("id: %d", i))
+	// for i, _ := range make([]int, 10) {
+	// 	go patterns.Execute(fmt.Sprintf("id: %d", i))
+	// }
+
+	if err := mariadb.Init(); err != nil {
+		panic(err)
 	}
 
-	time.Sleep(10 * time.Second)
+	// time.Sleep(5 * time.Second)
+
+	// mariadb.Init()
+
+	mariadb.Run()
 
 }
