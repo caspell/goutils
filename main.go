@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
-
-	_ "github.com/wunicorns/goutils/batch"
-	_ "github.com/wunicorns/goutils/httprequest"
-	"github.com/wunicorns/goutils/mariadb"
-	_ "github.com/wunicorns/goutils/patterns"
-	_ "github.com/wunicorns/goutils/querybuilder"
+	"sync"
+	// 	_ "github.com/wunicorns/goutils/batch"
+	// 	_ "github.com/wunicorns/goutils/httprequest"
+	// 	_ "github.com/wunicorns/goutils/patterns"
+	// 	_ "github.com/wunicorns/goutils/querybuilder"
 )
 
 func main() {
 
-	fmt.Println("start")
+	// fmt.Println("start")
 
 	// filename := "querybuilder/sample.yml"
 
@@ -38,14 +37,38 @@ func main() {
 	// 	go patterns.Execute(fmt.Sprintf("id: %d", i))
 	// }
 
-	if err := mariadb.Init(); err != nil {
-		panic(err)
+	// time.Sleep(10 * time.Second)
+
+	// fmt.Println(int64(math.Pow(2, 10)))
+
+	// fmt.Println(8192 * int64(math.Pow(2, 10)))
+
+	// fmt.Println(8 * 1024 * 1024)
+
+	// unit := strings.ToUpper("gb")
+	// basisUnits := []string{
+	// 	"Bytes", "KB", "MB", "GB", "TB", "PB",
+	// }
+
+	// fmt.Println(IndexOf(basisUnits, unit))
+
+	wg := &sync.WaitGroup{}
+
+	mu := &sync.Mutex{}
+
+	for i := 0; i < 20; i++ {
+		wg.Add(1)
+		mu.Lock()
+		go func(index int) {
+			defer func() {
+				wg.Done()
+				mu.Unlock()
+			}()
+			fmt.Println(index)
+		}(i)
 	}
 
-	// time.Sleep(5 * time.Second)
+	wg.Wait()
 
-	// mariadb.Init()
-
-	mariadb.Run()
-
+	fmt.Println("done!")
 }
