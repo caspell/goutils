@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -43,24 +44,76 @@ func job2(num int) func() {
 	}
 }
 
+func TestRunner() {
+
+	now := time.Now()
+
+	fmt.Println("Entry!", now.UnixMilli())
+
+	wg := &sync.WaitGroup{}
+
+	for i := 0; i < 7; i++ {
+		wg.Add(1)
+		go func(index int) {
+			fmt.Println("Print!", index)
+			time.Sleep(1 * time.Second)
+			wg.Done()
+		}(i)
+	}
+
+	wg.Wait()
+
+	fmt.Println("Exit!")
+
+}
+
+func TestRunnerBackup() {
+
+	err := recover()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("done!")
+}
+
+func TestRunner2() {
+	defer TestRunnerBackup()
+	value := 0
+	if value < 1 {
+		panic("value zero!!!!!")
+	}
+	fmt.Println(100 / value)
+}
+
 func Module() {
 
 	s := Scheduler{}
 	s.Tasks = &[]Task{
+		// Task{
+		// 	Name:     "job1",
+		// 	Schedule: `*/6 * * * * *`,
+		// 	Handler:  job1(rand.Int()),
+		// },
+		// Task{
+		// 	Name:     "job2",
+		// 	Schedule: `*/3 * * * * *`,
+		// 	Handler:  job2(rand.Int()),
+		// },
+		// Task{
+		// 	Name:     "job3",
+		// 	Schedule: `*/10 * * * * *`,
+		// 	Handler:  TestRunner,
+		// },
 		Task{
-			Name:     "job1",
-			Schedule: `*/6 * * * * *`,
-			Handler:  job1(rand.Int()),
-		},
-		Task{
-			Name:     "job2",
-			Schedule: `*/3 * * * * *`,
-			Handler:  job2(rand.Int()),
+			Name:     "job4",
+			Schedule: `*/5 * * * * *`,
+			Handler:  TestRunner2,
 		},
 	}
 
 	s.Start()
 
-	fmt.Println("done!")
-	time.Sleep(time.Second * 3)
+	fmt.Println("DONE!")
+
 }
