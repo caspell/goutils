@@ -1,6 +1,7 @@
 package patterns
 
 import (
+	"log"
 	"sync"
 	"time"
 )
@@ -52,7 +53,7 @@ func (tt *TaskTracker) Watch() {
 
 func (tt *TaskTracker) Notice(after ...func(self *TaskTracker)) {
 	if err := recover(); err != nil {
-		log.Println(tt.TaskName, err
+		log.Println(tt.TaskName, err)
 		if tt.TaskChannel != nil {
 			tt.TaskChannel <- 1
 		}

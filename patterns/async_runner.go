@@ -113,8 +113,10 @@ func Run1() {
 	}
 
 	tracker.ForEach(datas, func(v interface{}) {
+
 		d := v.(map[string]int)
 		void(d["index"] * ZeroValue)
 		time.Sleep(1 * time.Second)
+
 	})
 }
