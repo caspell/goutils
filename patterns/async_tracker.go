@@ -14,6 +14,7 @@ type TaskTracker struct {
 	WaitGroup       *sync.WaitGroup
 	TaskFailedCount uint
 	TaskChannel     chan int
+	ChannelClosed   bool
 }
 
 func MakeTracker(name string, isAsync bool, requiredCalls ...func(self *TaskTracker)) TaskTracker {
@@ -33,6 +34,7 @@ func MakeTracker(name string, isAsync bool, requiredCalls ...func(self *TaskTrac
 func (tt *TaskTracker) Wait() {
 	tt.WaitGroup.Wait()
 	close(tt.TaskChannel)
+	tt.ChannelClosed = true
 	tt.TaskChannel = nil
 }
 
@@ -49,12 +51,13 @@ func (tt *TaskTracker) Watch() {
 	for v := range tt.TaskChannel {
 		tt.TaskFailedCount = tt.TaskFailedCount + uint(v)
 	}
+	tt.ChannelClosed = true
 }
 
 func (tt *TaskTracker) Notice(after ...func(self *TaskTracker)) {
 	if err := recover(); err != nil {
 		log.Println(tt.TaskName, err)
-		if tt.TaskChannel != nil {
+		if !tt.ChannelClosed {
 			tt.TaskChannel <- 1
 		}
 	}
@@ -72,7 +75,7 @@ func (tt *TaskTracker) ForEach(datas []interface{}, executions ...func(interface
 				tt.Done()
 				if err := recover(); err != nil {
 					log.Println(tt.TaskName, err)
-					if tt.TaskChannel != nil {
+					if !tt.ChannelClosed {
 						tt.TaskChannel <- 1
 					}
 				}

@@ -9,6 +9,7 @@ import (
 	"log"
 	// "github.com/wunicorns/goutils/batch"
 	// "github.com/wunicorns/goutils/patterns"
+	"github.com/wunicorns/goutils/channel"
 )
 
 func init() {
@@ -16,18 +17,7 @@ func init() {
 	log.Println("")
 }
 
-type MainRef struct {
-	Name   string
-	Ints   []int
-	Floats *[]float64
-}
-
-type MainObject struct {
-	Name string
-	Ref1 *MainRef
-	Ref2 MainRef
-}
-
 func main() {
+	channel.Sample2()
 
 }
