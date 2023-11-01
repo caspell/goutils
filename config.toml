@@ -3,3 +3,6 @@ VALUE="test123"
 
 [Cfgs]
 VALUE="test1234"
+
+[Telegram]
+TOKEN=""

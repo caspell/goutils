@@ -1,13 +1,15 @@
 module github.com/wunicorns/goutils
 
 replace (
+	github.com/wunicorns/goutils/api => ./api
 	github.com/wunicorns/goutils/batch => ./batch
+	github.com/wunicorns/goutils/channel => ./channel
+	github.com/wunicorns/goutils/config => ./config
 	github.com/wunicorns/goutils/httprequest => ./httprequest
 	github.com/wunicorns/goutils/mail => ./mail
 	github.com/wunicorns/goutils/metrics => ./metrics
 	github.com/wunicorns/goutils/patterns => ./patterns
 	github.com/wunicorns/goutils/querybuilder => ./querybuilder
-	github.com/wunicorns/goutils/channel => ./channel	
 )
 
 go 1.19
@@ -22,8 +24,10 @@ require (
 )
 
 require (
+	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
+	github.com/technoweenie/multipartstreamer v1.0.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

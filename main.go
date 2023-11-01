@@ -8,8 +8,8 @@ import (
 
 	"log"
 	// "github.com/wunicorns/goutils/batch"
-	// "github.com/wunicorns/goutils/patterns"
-	"github.com/wunicorns/goutils/channel"
+	// "github.com/wunicorns/goutils/channel"
+	"github.com/wunicorns/goutils/api"
 )
 
 func init() {
@@ -18,6 +18,6 @@ func init() {
 }
 
 func main() {
-	channel.Sample2()
 
+	api.Run()
 }
