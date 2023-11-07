@@ -5,6 +5,7 @@ replace (
 	github.com/wunicorns/goutils/batch => ./batch
 	github.com/wunicorns/goutils/channel => ./channel
 	github.com/wunicorns/goutils/config => ./config
+	github.com/wunicorns/goutils/fileinclude => ./fileinclude
 	github.com/wunicorns/goutils/httprequest => ./httprequest
 	github.com/wunicorns/goutils/mail => ./mail
 	github.com/wunicorns/goutils/metrics => ./metrics
@@ -24,6 +25,7 @@ require (
 )
 
 require (
+	github.com/BurntSushi/toml v1.3.2 // indirect
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/kr/pretty v0.3.1 // indirect

@@ -1,23 +1,30 @@
 package main
 
 import (
+	"embed"
 	"fmt"
 	_ "runtime/debug"
 	_ "sync"
 	"time"
 
-	"log"
+	"github.com/wunicorns/goutils/mail"
 	// "github.com/wunicorns/goutils/batch"
 	// "github.com/wunicorns/goutils/channel"
-	"github.com/wunicorns/goutils/api"
+	// "github.com/wunicorns/goutils/api"
 )
+
+//go:embed files
+var d embed.FS
 
 func init() {
 	fmt.Println("main package initialized. ", time.Now())
-	log.Println("")
 }
 
 func main() {
 
-	api.Run()
+	// api.Run()
+	// fi.Include(&d)
+
+	mail.Main()
+
 }

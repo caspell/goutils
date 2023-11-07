@@ -1,0 +1,45 @@
+#-------------------------------------------------------#  
+config:
+  range: "migrate_range"
+  data: "migrate_data"
+  type: "config"
+  enable: false
+#-------------------------------------------------------#  
+migrate_range:
+  description: "get range"
+  type: "influxdb"
+  columns:
+    - "instance"
+    - "_time"
+    - "_value"
+  script: '
+from(bucket: {bucket})
+|> range(start: -365d)
+  |> filter(fn: (r) => r["_measurement"] == "node_disk_read_time_seconds_total" )
+  |> group(columns: ["instance"])
+  |> aggregateWindow(every: 1d, fn: mean, createEmpty: false)
+  |> first()
+  |> yield()
+  '
+#-------------------------------------------------------#  
+migrate_data:
+  description: "get data"
+  type: "influxdb"
+  columns:
+    - "instance"
+    - "_time"
+    - "_value"
+    - "_measurement=>_field"
+  script: '
+from(bucket: {bucket})
+  |> range(start: :start, stop: :stop)
+  |> filter(fn: (r) => r["_measurement"] == "node_disk_read_time_seconds_total" or r["_measurement"] == "node_disk_write_time_seconds_total")
+  |> filter(fn: (r) => r["instance"] == :instance)
+  |> increase()
+  |> derivative(unit: 1s)
+  |> group(columns: ["instance","_measurement"])
+  |> aggregateWindow(every:  10s, fn: mean, createEmpty: false)
+  |> map(fn: (r) => ({ r with _value: r._value * 100.0 }))
+  |> keep(columns: ["_value", "_time", "_measurement", "instance"])
+  |> yield()
+  '

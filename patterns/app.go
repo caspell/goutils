@@ -2,12 +2,10 @@ package patterns
 
 import (
 	"fmt"
-	"os"
 	"runtime/debug"
 	"strings"
 	"time"
 
-	mail "github.com/wunicorns/goutils/mail"
 	_ "golang.org/x/sys/unix"
 	"golang.org/x/sys/windows"
 )
@@ -55,56 +53,6 @@ m3:
 	fmt.Println("m3 called!")
 	goto end
 end:
-}
-
-func mailCheck() {
-
-	sender := mail.MailSender{}
-	sender.Config = mail.SmtpConfig{
-		SmtpServer:      "",
-		AuthUsername:    "",
-		AuthPassword:    "",
-		EmailSenderName: "",
-		EmailSender:     "",
-	}
-
-	message := mail.MailMessage{}
-
-	message.SetFrom("Test1", "")
-	message.SetTo("Test2", "")
-	message.Subject = "Test Sub ject "
-	message.IsHtml = true
-
-	if fileHtml, err := os.ReadFile("files/F001.html"); err != nil {
-		message.Body = err.Error()
-	} else {
-		// message.Body = string(fileHtml)
-
-		messageTemplate := string(fileHtml)
-		systemEmail := sender.Config.EmailSender
-		occurDate := time.Now().Format("2006-01-02 15:04:05")
-
-		target := make(map[string]interface{})
-
-		target["os_ip_addr"] = ""
-		target["threshold_type_name"] = "타입"
-		target["code_name"] = "severity"
-		messageContent := "empty "
-
-		messageTemplate = strings.Replace(messageTemplate, "<?=email?>", systemEmail, 1)
-		messageTemplate = strings.Replace(messageTemplate, "<?=occur_date?>", occurDate, 1)
-		messageTemplate = strings.Replace(messageTemplate, "<?=ip_addr?>", target["os_ip_addr"].(string), 1)
-		messageTemplate = strings.Replace(messageTemplate, "<?=category?>", target["threshold_type_name"].(string), 1)
-		messageTemplate = strings.Replace(messageTemplate, "<?=severity?>", target["code_name"].(string), 1)
-		messageTemplate = strings.Replace(messageTemplate, "<?=message?>", messageContent, 1)
-
-		message.Body = messageTemplate
-	}
-
-	if err := sender.Send(&message); err != nil {
-		fmt.Println(err)
-	}
-
 }
 
 func dateCheck() {
@@ -244,8 +192,7 @@ func (s *SerialData) Time() time.Time {
 	return time.Unix(int64(s.Timestamp)/second, (int64(s.Timestamp)%second)*nanosPerTick)
 }
 
-func main() {
-	// mailCheck()
+func Main() {
 	// var configFilePath string
 
 	// flag.StringVar(&configFilePath, "c", "config.toml", "(*Require) Config file")
