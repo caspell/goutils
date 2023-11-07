@@ -7,7 +7,8 @@ import (
 	_ "sync"
 	"time"
 
-	"github.com/wunicorns/goutils/mail"
+	"github.com/wunicorns/goutils/crypto"
+	// "github.com/wunicorns/goutils/mail"
 	// "github.com/wunicorns/goutils/batch"
 	// "github.com/wunicorns/goutils/channel"
 	// "github.com/wunicorns/goutils/api"
@@ -25,6 +26,6 @@ func main() {
 	// api.Run()
 	// fi.Include(&d)
 
-	mail.Main()
+	crypto.Main()
 
 }
