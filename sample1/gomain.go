@@ -8,10 +8,10 @@ import (
 
 func main() {
 
-	key := "_TTM__CIPHER_KEY_0123456789012__"
-	akey := "caspell@naver.com"
+	key := ""
+	akey := ""
 
-	value := "test12341!"
+	value := ""
 
 	aes := crypto.NewAES256GSM(key, akey)
 	if enc, err := aes.Encrypt(value); err != nil {

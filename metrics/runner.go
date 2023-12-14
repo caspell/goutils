@@ -50,9 +50,9 @@ func (m MetricLauncher) Serve(config *PromConfig) {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte(`<html>
-			<head><title>TTM batch Exporter</title></head>
+			<head><title> batch Exporter</title></head>
 			<body>
-			<h1>TTM batch Exporter</h1>
+			<h1> batch Exporter</h1>
 			<p><a href="` + config.MetricsPath + `">Metrics</a></p>
 			</body>
 			</html>`))
