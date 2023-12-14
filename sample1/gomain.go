@@ -1,73 +1,23 @@
 package main
 
 import (
-	"fmt"
-	"math/rand"
-	"time"
+	"log"
 
-	"encoding/json"
-
-	_ "github.com/wunicorns/goutils/patterns"
+	"gitlab.antline.com/golib/crypto.git"
 )
-
-type Data struct {
-	Name string `json:"name"`
-	Age  int    `json:"age"`
-}
-
-func _main() {
-
-	val := `{}`
-
-	obj := Data{
-		Name: "myname",
-		Age:  10,
-	}
-
-	if bytes, err := json.Marshal(obj); err != nil {
-		panic(err)
-	} else {
-		fmt.Println("marshal")
-		fmt.Println(string(bytes))
-	}
-
-	bval := []byte(val)
-
-	obj2 := Data{}
-
-	json.Unmarshal(bval, &obj2)
-
-	fmt.Println("done")
-
-	// patterns.PatternSingleTone()
-
-}
-
-func FuncTest(name string) func() {
-	num := rand.Int()
-	fmt.Println("intask 1 ", name, num)
-	begin := time.Now()
-	return func() {
-		time.Sleep(1 * time.Second)
-		last := time.Since(begin).Milliseconds()
-		fmt.Println("intask 2 ", name, last, num)
-		err := recover()
-		if err != nil {
-			fmt.Println("error :: ", err)
-		}
-	}
-}
 
 func main() {
 
-	fmt.Println("task 1")
+	key := "_TTM__CIPHER_KEY_0123456789012__"
+	akey := "caspell@naver.com"
 
-	defer FuncTest("test1")()
-	defer FuncTest("test2")()
-	defer FuncTest("test3")()
-	defer FuncTest("test4")()
-	// if true {
-	// 	panic("func")
-	// }
-	fmt.Println("task 2")
+	value := "test12341!"
+
+	aes := crypto.NewAES256GSM(key, akey)
+	if enc, err := aes.Encrypt(value); err != nil {
+		log.Fatal(err)
+	} else {
+		log.Println("result: ", len(enc))
+	}
+
 }

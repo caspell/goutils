@@ -10,7 +10,7 @@ func init() {
 }
 
 func Main() {
-	cipherKey := "__CIPHERKEY0123456789012345678__"
+	cipherKey := "_TTM__CIPHER_KEY_0123456789012__"
 	cipherIvKey := "__CIPHERIVKEY0__"
 
 	log.Println(len(cipherKey), len(cipherIvKey))

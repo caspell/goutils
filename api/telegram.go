@@ -2,41 +2,109 @@ package api
 
 import (
 	"log"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func init() {
-	log.Println("telegram api test init.")
+type Telegram struct {
+	Token  string
+	ChatId int64
+	*tgbotapi.BotAPI
+	Receiver chan SimpleMessage
 }
 
-const (
-	TOKEN = ""
-)
+type SimpleMessage struct {
+	Id        int64
+	MessageId int
+	Name      string
+	Text      string
+	DateTime  time.Time
+}
 
-func Run() {
-	bot, err := tgbotapi.NewBotAPI(TOKEN)
+func (t *Telegram) Init() {
+	bot, err := tgbotapi.NewBotAPI(t.Token)
 	if err != nil {
 		log.Panic(err)
 	}
-
 	bot.Debug = true
+	t.BotAPI = bot
+	t.Receiver = make(chan SimpleMessage)
+	t.ChatId = t.lookupChat()
+}
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+func (t *Telegram) GetChatId() (int64, error) {
+
+	var chatId int64
+	var err error
 
 	u := tgbotapi.NewUpdate(0)
+
 	u.Timeout = 60
 
-	updates := bot.GetUpdatesChan(u)
+	updates, err := t.BotAPI.GetUpdates(u)
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println(updates)
+
+	if len(updates) > 0 {
+		chatId = updates[len(updates)-1].Message.Chat.ID
+	} else {
+		log.Println("no messages")
+	}
+
+	return chatId, err
+}
+
+func (t *Telegram) Send(msg SimpleMessage) error {
+	botMsg := tgbotapi.NewMessage(t.ChatId, msg.Text)
+	rst, err := t.BotAPI.Send(botMsg)
+	if err != nil {
+		return err
+	}
+	log.Println(rst)
+	return nil
+}
+
+func (t *Telegram) lookupChat() int64 {
+	log.Printf("Authorized on account %s", t.BotAPI.Self.UserName)
+	u := tgbotapi.NewUpdate(0)
+	u.Timeout = 60
+	updates := t.BotAPI.GetUpdatesChan(u)
+	for update := range updates {
+		if update.Message != nil {
+			return update.Message.Chat.ID
+		}
+	}
+	return -1
+}
+
+func (t *Telegram) Listen() {
+
+	log.Printf("Authorized on account %s", t.BotAPI.Self.UserName)
+
+	u := tgbotapi.NewUpdate(0)
+
+	u.Timeout = 60
+
+	updates := t.BotAPI.GetUpdatesChan(u)
 
 	for update := range updates {
+
 		if update.Message != nil { // If we got a message
-			log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
 
-			msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-			msg.ReplyToMessageID = update.Message.MessageID
+			log.Printf("AAA: [%s] %s", update.Message.From.UserName, update.Message.Text)
+			log.Println("AAA:: ", update.Message.Chat)
 
-			bot.Send(msg)
+			t.Receiver <- SimpleMessage{
+				Id:        update.Message.Chat.ID,
+				MessageId: update.Message.MessageID,
+				Name:      update.Message.From.UserName,
+				Text:      update.Message.Text,
+				DateTime:  time.Unix(int64(update.Message.Date), 0),
+			}
 		}
 	}
 }

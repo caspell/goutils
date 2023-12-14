@@ -58,7 +58,9 @@ func (m MetricLauncher) Serve(config *PromConfig) {
 			</html>`))
 	})
 
-	server := &http.Server{Addr: config.ListenAddress}
+	server := &http.Server{
+		Addr: config.ListenAddress,
+	}
 	if err := web.ListenAndServe(server, &tlsConfigFile, logger); err != nil {
 		log.Fatalf("Failed to start the server: %v", err)
 		os.Exit(1)
