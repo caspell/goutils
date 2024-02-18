@@ -1,26 +1,22 @@
 package main
 
+// "github.com/wunicorns/goutils/cached"
+// "github.com/wunicorns/goutils/hash"
+
 func init() {
 
 }
 
 func main() {
 
-	// cmd := "git"
-	// args := []string{"tag"} // command arguments
-
-	// // Create a command
-	// command := exec.Command(cmd, args...)
-
-	// // Run the command and handle errors
-	// output, err := command.Output()
-	// if err != nil {
-	// 	fmt.Println("Error executing command:", err)
-	// 	return
+	// const TEST_KEY = "testkey"
+	// if err := cached.Put(TEST_KEY, "testok"); err != nil {
+	// 	panic(err)
 	// }
+	// log.Println(cached.Get(TEST_KEY))
 
-	// // Print the output of the command
+	// // log.Println(hash.GetSerialNumber())
 
-	// fmt.Println(strings.Trim(string(output), ""))
+	// // log.Println(hash.GetSerialNumber())
 
 }
