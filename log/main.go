@@ -1,4 +1,4 @@
-package main
+package log
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ import (
 
 const MAX_TRACE = 10
 
-func main() {
+func main_() {
 
 	fmt.Println(getFullCaller(nil))
 
